@@ -84,8 +84,9 @@ export function AuditTrail({ auditLog, harmonizedCode, onRollback }: AuditTrailP
   }
 
   const calculateStats = () => {
-    const totalTransformations = auditLog.transformations.length
-    const appliedTransformations = auditLog.transformations.filter(t => t.applied).length
+    const transformations = Array.isArray(auditLog.transformations) ? auditLog.transformations : []
+    const totalTransformations = transformations.length
+    const appliedTransformations = transformations.filter(t => t.applied).length
     const successRate = totalTransformations > 0 ? (appliedTransformations / totalTransformations) * 100 : 0
     
     return { totalTransformations, appliedTransformations, successRate }
@@ -163,7 +164,7 @@ export function AuditTrail({ auditLog, harmonizedCode, onRollback }: AuditTrailP
               <Card>
                 <CardContent className="p-4">
                   <div className="text-2xl font-bold text-blue-600">
-                    {auditLog.steps.length}
+                    {Array.isArray(auditLog.steps) ? auditLog.steps.length : 0}
                   </div>
                   <div className="text-sm text-muted-foreground">
                     Processing Steps
@@ -175,7 +176,7 @@ export function AuditTrail({ auditLog, harmonizedCode, onRollback }: AuditTrailP
             <div>
               <h3 className="font-medium mb-2">Applied Intentions</h3>
               <div className="flex flex-wrap gap-2">
-                {auditLog.selectedIntentions.map(intention => (
+                {(Array.isArray(auditLog.selectedIntentions) ? auditLog.selectedIntentions : []).map(intention => (
                   <Badge key={intention} variant="secondary">
                     {intention}
                   </Badge>
@@ -187,7 +188,7 @@ export function AuditTrail({ auditLog, harmonizedCode, onRollback }: AuditTrailP
           <TabsContent value="transformations" className="space-y-4">
             <ScrollArea className="h-64">
               <div className="space-y-3">
-                {auditLog.transformations.map((transformation, index) => (
+                {(Array.isArray(auditLog.transformations) ? auditLog.transformations : []).map((transformation, index) => (
                   <div
                     key={index}
                     className={cn(
@@ -228,7 +229,7 @@ export function AuditTrail({ auditLog, harmonizedCode, onRollback }: AuditTrailP
           <TabsContent value="timeline" className="space-y-4">
             <ScrollArea className="h-64">
               <div className="space-y-3">
-                {auditLog.steps.map((step, index) => (
+                {(Array.isArray(auditLog.steps) ? auditLog.steps : []).map((step, index) => (
                   <div key={index} className="flex items-start gap-3 p-3 rounded-lg border">
                     <div className="w-5 h-5 mt-0.5">
                       <CheckCircle className="w-5 h-5 text-green-600" />

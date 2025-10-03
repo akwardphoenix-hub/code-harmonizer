@@ -46,12 +46,14 @@ export function HarmonizationEngine({
   }
 
   const initializeSteps = () => {
+    const safeSelectedIntentions = Array.isArray(selectedIntentions) ? selectedIntentions : []
+    
     const baseSteps = [
       { id: 'analyze', name: 'Code Analysis', description: 'Parsing and understanding code structure' },
       { id: 'validate', name: 'Validation', description: 'Checking syntax and detecting issues' }
     ]
 
-    const intentionSteps = selectedIntentions.map(id => ({
+    const intentionSteps = safeSelectedIntentions.map(id => ({
       id: `intention-${id}`,
       name: intentionNames[id] || 'Unknown Intention',
       description: `Applying ${intentionNames[id]?.toLowerCase() || 'transformation'}`
@@ -107,15 +109,18 @@ export function HarmonizationEngine({
   }
 
   const generateHarmonizedCode = async (): Promise<string> => {
-    if (!sourceCode || !sourceCode.trim()) return sourceCode || ''
+    const safeSourceCode = sourceCode || ''
+    const safeSelectedIntentions = Array.isArray(selectedIntentions) ? selectedIntentions : []
+    
+    if (!safeSourceCode || !safeSourceCode.trim()) return safeSourceCode
 
     try {
-      const intentionList = selectedIntentions.map(id => intentionNames[id] || id).join(', ')
+      const intentionList = safeSelectedIntentions.map(id => intentionNames[id] || id).join(', ')
       
-      const promptText = `You are a code harmonization engine. Transform this code based on the selected intentions: ${selectedIntentions.join(', ')}.
+      const promptText = `You are a code harmonization engine. Transform this code based on the selected intentions: ${safeSelectedIntentions.join(', ')}.
 
 Original code:
-${sourceCode}
+${safeSourceCode}
 
 Instructions:
 - Apply the selected transformations while preserving functionality
@@ -126,20 +131,23 @@ Instructions:
 Selected intentions: ${intentionList}`
 
       const result = await window.spark.llm(promptText)
-      return result || sourceCode
+      return result || safeSourceCode
     } catch (error) {
       console.error('Harmonization failed:', error)
-      return sourceCode
+      return safeSourceCode
     }
   }
 
   const generateAuditLog = (processingSteps: HarmonizationStep[]) => {
+    const safeSourceCode = sourceCode || ''
+    const safeSelectedIntentions = Array.isArray(selectedIntentions) ? selectedIntentions : []
+    
     return {
       timestamp: new Date().toISOString(),
-      originalCode: sourceCode,
-      selectedIntentions,
+      originalCode: safeSourceCode,
+      selectedIntentions: safeSelectedIntentions,
       steps: processingSteps,
-      transformations: selectedIntentions.map(id => ({
+      transformations: safeSelectedIntentions.map(id => ({
         intention: id,
         name: intentionNames[id],
         applied: true,
@@ -148,7 +156,7 @@ Selected intentions: ${intentionList}`
     }
   }
 
-  const canHarmonize = sourceCode && sourceCode.trim() && selectedIntentions.length > 0
+  const canHarmonize = sourceCode && typeof sourceCode === 'string' && sourceCode.trim() && Array.isArray(selectedIntentions) && selectedIntentions.length > 0
 
   return (
     <Card>
@@ -164,7 +172,7 @@ Selected intentions: ${intentionList}`
           <Alert>
             <Warning className="w-4 h-4" />
             <AlertDescription>
-              {!sourceCode || !sourceCode.trim() 
+              {!sourceCode || (typeof sourceCode === 'string' && !sourceCode.trim())
                 ? "Please enter source code to harmonize" 
                 : "Please select at least one intention from the library"
               }
@@ -172,7 +180,7 @@ Selected intentions: ${intentionList}`
           </Alert>
         )}
 
-        {selectedIntentions.length > 0 && (
+        {Array.isArray(selectedIntentions) && selectedIntentions.length > 0 && (
           <div>
             <h3 className="font-medium text-sm mb-2">Selected Intentions</h3>
             <div className="flex flex-wrap gap-2">

@@ -36,11 +36,11 @@ function App() {
   const [activeTab, setActiveTab] = useState('input')
 
   // Ensure selectedIntentions is always an array
-  const safeSelectedIntentions = selectedIntentions || []
+  const safeSelectedIntentions = Array.isArray(selectedIntentions) ? selectedIntentions : []
 
   const handleIntentionToggle = (intentionId: string) => {
     setSelectedIntentions((prev) => {
-      const currentIntentions = prev || []
+      const currentIntentions = Array.isArray(prev) ? prev : []
       return currentIntentions.includes(intentionId)
         ? currentIntentions.filter(id => id !== intentionId)
         : [...currentIntentions, intentionId]

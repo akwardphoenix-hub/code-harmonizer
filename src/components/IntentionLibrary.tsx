@@ -114,7 +114,7 @@ export function IntentionLibrary({
     enhance: 'Code Enhancement'
   }
 
-  const selectedCount = selectedIntentions.length
+  const selectedCount = Array.isArray(selectedIntentions) ? selectedIntentions.length : 0
 
   return (
     <Card>
@@ -164,7 +164,7 @@ export function IntentionLibrary({
             <div className="grid gap-3">
               {categoryIntentions.map((intention) => {
                 const Icon = intention.icon
-                const isSelected = selectedIntentions.includes(intention.id)
+                const isSelected = Array.isArray(selectedIntentions) && selectedIntentions.includes(intention.id)
                 
                 return (
                   <div
