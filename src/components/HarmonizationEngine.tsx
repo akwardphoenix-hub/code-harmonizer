@@ -107,7 +107,7 @@ export function HarmonizationEngine({
   }
 
   const generateHarmonizedCode = async (): Promise<string> => {
-    if (!sourceCode.trim()) return sourceCode
+    if (!sourceCode || !sourceCode.trim()) return sourceCode || ''
 
     try {
       const intentionList = selectedIntentions.map(id => intentionNames[id] || id).join(', ')
@@ -147,7 +147,7 @@ Selected intentions: ${intentionList}`
     }
   }
 
-  const canHarmonize = sourceCode.trim() && selectedIntentions.length > 0
+  const canHarmonize = sourceCode && sourceCode.trim() && selectedIntentions.length > 0
 
   return (
     <Card>
@@ -163,7 +163,7 @@ Selected intentions: ${intentionList}`
           <Alert>
             <Warning className="w-4 h-4" />
             <AlertDescription>
-              {!sourceCode.trim() 
+              {!sourceCode || !sourceCode.trim() 
                 ? "Please enter source code to harmonize" 
                 : "Please select at least one intention from the library"
               }
