@@ -29,12 +29,15 @@ const sampleCode = `function calculateTotal(items) {
 }`
 
 function App() {
-  const [sourceCode, setSourceCode] = useKV('harmonizer-source-code', sampleCode)
-  const [harmonizedCode, setHarmonizedCode] = useKV('harmonizer-output-code', '')
+  const [sourceCode, setSourceCode] = useKV<string>('harmonizer-source-code', sampleCode)
+  const [harmonizedCode, setHarmonizedCode] = useKV<string>('harmonizer-output-code', '')
   const [selectedIntentions, setSelectedIntentions] = useKV<string[]>('harmonizer-intentions', [])
   const [auditLog, setAuditLog] = useKV<any>('harmonizer-audit-log', null)
   const [activeTab, setActiveTab] = useState('input')
 
+  // Ensure sourceCode is always a string
+  const safeSourceCode = typeof sourceCode === 'string' ? sourceCode : ''
+  
   // Ensure selectedIntentions is always an array
   const safeSelectedIntentions = Array.isArray(selectedIntentions) ? selectedIntentions : []
 
@@ -139,13 +142,13 @@ function App() {
 
               <TabsContent value="input" className="space-y-4">
                 <CodeEditor
-                  value={sourceCode || ''}
+                  value={safeSourceCode}
                   onChange={setSourceCode}
                   placeholder="Enter your code here or click 'Load Sample' to try with example code..."
                   title="Source Code"
                 />
                 
-                {sourceCode && harmonizedCode && (
+                {safeSourceCode && harmonizedCode && (
                   <Card className="bg-muted/30">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -196,7 +199,7 @@ function App() {
             />
 
             <HarmonizationEngine
-              sourceCode={sourceCode || ''}
+              sourceCode={safeSourceCode}
               selectedIntentions={safeSelectedIntentions}
               onHarmonize={handleHarmonize}
             />

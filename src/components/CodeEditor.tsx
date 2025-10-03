@@ -32,7 +32,7 @@ const languageMap: Record<string, string> = {
 }
 
 const detectLanguage = (code: string): string => {
-  if (!code.trim()) return 'text'
+  if (!code || typeof code !== 'string' || !code.trim()) return 'text'
   
   if (code.includes('function') && (code.includes('=>') || code.includes('const') || code.includes('let'))) {
     return code.includes('interface') || code.includes(': string') ? 'typescript' : 'javascript'

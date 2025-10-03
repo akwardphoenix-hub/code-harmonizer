@@ -109,7 +109,7 @@ export function HarmonizationEngine({
   }
 
   const generateHarmonizedCode = async (): Promise<string> => {
-    const safeSourceCode = sourceCode || ''
+    const safeSourceCode = typeof sourceCode === 'string' ? sourceCode : ''
     const safeSelectedIntentions = Array.isArray(selectedIntentions) ? selectedIntentions : []
     
     if (!safeSourceCode || !safeSourceCode.trim()) return safeSourceCode
@@ -117,7 +117,8 @@ export function HarmonizationEngine({
     try {
       const intentionList = safeSelectedIntentions.map(id => intentionNames[id] || id).join(', ')
       
-      const promptText = `You are a code harmonization engine. Transform this code based on the selected intentions: ${safeSelectedIntentions.join(', ')}.
+      const intentionListText = safeSelectedIntentions.join(', ')
+      const promptText = `You are a code harmonization engine. Transform this code based on the selected intentions: ${intentionListText}.
 
 Original code:
 ${safeSourceCode}
@@ -139,7 +140,7 @@ Selected intentions: ${intentionList}`
   }
 
   const generateAuditLog = (processingSteps: HarmonizationStep[]) => {
-    const safeSourceCode = sourceCode || ''
+    const safeSourceCode = typeof sourceCode === 'string' ? sourceCode : ''
     const safeSelectedIntentions = Array.isArray(selectedIntentions) ? selectedIntentions : []
     
     return {
