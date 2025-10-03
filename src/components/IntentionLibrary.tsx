@@ -9,7 +9,6 @@ import {
   ShieldCheck, 
   ArrowsClockwise, 
   Bug, 
-  Speedometer,
   Code,
   CheckCircle
 } from '@phosphor-icons/react'

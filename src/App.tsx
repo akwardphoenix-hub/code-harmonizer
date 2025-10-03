@@ -1,19 +1,16 @@
 import { useState } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useLocalKV } from './hooks/useLocalKV'
 import { CodeEditor } from './components/CodeEditor'
 import { IntentionLibrary } from './components/IntentionLibrary'
 import { HarmonizationEngine } from './components/HarmonizationEngine'
 import { AuditTrail } from './components/AuditTrail'
-import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
+import { Card, CardContent } from './components/ui/card'
 import { Badge } from './components/ui/badge'
 import { Button } from './components/ui/button'
-import { Separator } from './components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs'
 import { 
   Code, 
-  Target, 
   MagicWand, 
-  ClockClockwise,
   Sparkle,
   ArrowRight
 } from '@phosphor-icons/react'
@@ -29,10 +26,10 @@ const sampleCode = `function calculateTotal(items) {
 }`
 
 function App() {
-  const [sourceCode, setSourceCode] = useKV<string>('harmonizer-source-code', sampleCode)
-  const [harmonizedCode, setHarmonizedCode] = useKV<string>('harmonizer-output-code', '')
-  const [selectedIntentions, setSelectedIntentions] = useKV<string[]>('harmonizer-intentions', [])
-  const [auditLog, setAuditLog] = useKV<any>('harmonizer-audit-log', null)
+  const [sourceCode, setSourceCode] = useLocalKV<string>('harmonizer-source-code', sampleCode)
+  const [harmonizedCode, setHarmonizedCode] = useLocalKV<string>('harmonizer-output-code', '')
+  const [selectedIntentions, setSelectedIntentions] = useLocalKV<string[]>('harmonizer-intentions', [])
+  const [auditLog, setAuditLog] = useLocalKV<any>('harmonizer-audit-log', null)
   const [activeTab, setActiveTab] = useState('input')
 
   // Ensure sourceCode is always a string
