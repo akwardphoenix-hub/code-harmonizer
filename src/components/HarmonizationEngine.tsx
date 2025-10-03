@@ -111,6 +111,7 @@ export function HarmonizationEngine({
 
     try {
       const intentionList = selectedIntentions.map(id => intentionNames[id] || id).join(', ')
+      
       const promptText = `You are a code harmonization engine. Transform this code based on the selected intentions: ${selectedIntentions.join(', ')}.
 
 Original code:

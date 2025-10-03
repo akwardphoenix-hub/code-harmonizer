@@ -35,12 +35,16 @@ function App() {
   const [auditLog, setAuditLog] = useKV<any>('harmonizer-audit-log', null)
   const [activeTab, setActiveTab] = useState('input')
 
+  // Ensure selectedIntentions is always an array
+  const safeSelectedIntentions = selectedIntentions || []
+
   const handleIntentionToggle = (intentionId: string) => {
-    setSelectedIntentions((prev = []) => 
-      prev.includes(intentionId)
-        ? prev.filter(id => id !== intentionId)
-        : [...prev, intentionId]
-    )
+    setSelectedIntentions((prev) => {
+      const currentIntentions = prev || []
+      return currentIntentions.includes(intentionId)
+        ? currentIntentions.filter(id => id !== intentionId)
+        : [...currentIntentions, intentionId]
+    })
   }
 
   const handleSelectAllIntentions = () => {
@@ -185,7 +189,7 @@ function App() {
 
           <div className="space-y-6">
             <IntentionLibrary
-              selectedIntentions={selectedIntentions || []}
+              selectedIntentions={safeSelectedIntentions}
               onIntentionToggle={handleIntentionToggle}
               onSelectAll={handleSelectAllIntentions}
               onClearAll={handleClearAllIntentions}
@@ -193,7 +197,7 @@ function App() {
 
             <HarmonizationEngine
               sourceCode={sourceCode || ''}
-              selectedIntentions={selectedIntentions || []}
+              selectedIntentions={safeSelectedIntentions}
               onHarmonize={handleHarmonize}
             />
 
