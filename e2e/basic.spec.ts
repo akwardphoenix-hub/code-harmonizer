@@ -70,13 +70,8 @@ test.describe('Code Harmonizer Basic Functionality', () => {
     // Click harmonize button
     await page.getByRole('button', { name: /Harmonize Code/i }).click();
     
-    // Wait for harmonization to complete (uses mock LLM, should be fast)
-    await page.waitForTimeout(1000);
-    
-    // Check if output tab shows harmonized code
+    // Wait for harmonization to complete by waiting for harmonized code to appear
     await page.getByRole('tab', { name: /Harmonized Code/i }).click();
-    
-    // Verify harmonized code is displayed
     const harmonizedEditor = page.locator('textarea, [contenteditable="true"]').last();
     await expect(harmonizedEditor).not.toBeEmpty();
   });
