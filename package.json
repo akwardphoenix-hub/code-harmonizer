@@ -96,3 +96,7 @@
         ]
     }
 }
+```json
+"scripts": {
+  "test:e2e": "playwright test"
+}
