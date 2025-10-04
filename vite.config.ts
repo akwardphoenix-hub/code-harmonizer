@@ -22,4 +22,16 @@ export default defineConfig({
       '@': resolve(projectRoot, 'src')
     }
   },
+  server: {
+    // Bind to localhost only to avoid firewall issues in CI
+    host: '127.0.0.1',
+    port: 5173,
+    strictPort: true,
+  },
+  preview: {
+    // Same configuration for preview mode
+    host: '127.0.0.1',
+    port: 5173,
+    strictPort: true,
+  },
 });
