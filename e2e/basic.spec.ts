@@ -72,7 +72,7 @@ test.describe('Code Harmonizer Basic Functionality', () => {
     
     // Wait for harmonization to complete by waiting for harmonized code to appear
     await page.getByRole('tab', { name: /Harmonized Code/i }).click();
-    const harmonizedEditor = page.locator('textarea, [contenteditable="true"]').last();
+    const harmonizedEditor = page.getByTestId('harmonized-editor');
     await expect(harmonizedEditor).not.toBeEmpty();
   });
 
