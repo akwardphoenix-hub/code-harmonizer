@@ -1,0 +1,14 @@
+# .github/copilot-setup-steps.yml
+setup:
+  steps:
+    - name: Install system deps
+      run: sudo apt-get update && sudo apt-get install -y curl gnupg
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+        cache: 'npm'
+    - name: Install project deps
+      run: npm ci
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps
