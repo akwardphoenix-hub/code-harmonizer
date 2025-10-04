@@ -83,10 +83,7 @@ test.describe('Code Harmonizer Basic Functionality', () => {
     await optimizeCheckbox.check();
     await page.getByRole('button', { name: /Harmonize Code/i }).click();
     
-    // Wait for completion
-    await page.waitForTimeout(1000);
-    
-    // Check for audit trail elements
+    // Wait for completion by checking for audit trail elements
     await expect(page.getByText('Audit Trail')).toBeVisible();
   });
 
