@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Code Harmonizer Basic Functionality', () => {
-  test.beforeEach(async ({ page, context }) => {
+  test.beforeEach(async ({ page }) => {
     // Mock external API calls to avoid network requests
     // This prevents failures due to firewall blocking esm.ubuntu.com and api.github.com
     await page.route('**/*esm.ubuntu.com*/**', route => {
