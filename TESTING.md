@@ -31,9 +31,11 @@ npm run test:e2e:ui
 ```
 
 The E2E tests will automatically:
-1. Start a local development server on `http://127.0.0.1:5173`
+1. Start a local development server on `http://127.0.0.1:5173` (or port 5000 if using Spark plugin)
 2. Run the test suite against the local server
 3. Shut down the server when tests complete
+
+**Note:** The Spark plugin may override the Vite port configuration and use port 5000 instead of 5173. The Playwright configuration handles this automatically via environment variables.
 
 ### Linting
 
@@ -103,8 +105,10 @@ server: {
 
 This ensures:
 - No external network access during development
-- Tests only communicate with `http://127.0.0.1:5173`
+- Tests only communicate with localhost (port 5000 when Spark plugin is active, or 5173 otherwise)
 - No telemetry or analytics sent to external services
+
+**Note:** The GitHub Spark plugin may override Vite's port configuration and use port 5000. This is expected behavior and does not affect the security or functionality of the tests.
 
 #### 4. **Playwright Configuration**
 
