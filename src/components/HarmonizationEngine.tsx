@@ -4,13 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { callLLM } from '@/lib/llm'
 import { 
   Play, 
   CheckCircle, 
   Warning, 
   Clock, 
-  MagicWand,
-  ArrowRight 
+  MagicWand
 } from '@phosphor-icons/react'
 
 interface HarmonizationStep {
@@ -131,7 +131,7 @@ Instructions:
 
 Selected intentions: ${intentionList}`
 
-      const result = await window.spark.llm(promptText)
+      const result = await callLLM(promptText)
       return result || safeSourceCode
     } catch (error) {
       console.error('Harmonization failed:', error)
