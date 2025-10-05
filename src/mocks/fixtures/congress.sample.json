@@ -1,0 +1,11 @@
+{
+  "bills": [
+    {
+      "id": "hr-1234",
+      "title": "Sample Bill for Testing",
+      "summary": "A mock bill used in agent-safe testing.",
+      "updatedAt": "2025-10-03T12:00:00Z",
+      "status": "INTRODUCED"
+    }
+  ]
+}

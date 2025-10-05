@@ -1,0 +1,5 @@
+{
+  "entries": [
+    { "id": "evt-001", "kind": "proposal.created", "at": "2025-10-03T13:00:00Z", "by": "system", "data": { "proposalId": "proposal-001" } }
+  ]
+}

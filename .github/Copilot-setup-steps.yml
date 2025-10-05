@@ -1,16 +1,9 @@
-# .github/copilot-setup-steps.yml
+# This file runs BEFORE the agent firewall in its ephemeral environment.
+# Keep it minimal—no external apt, no dev servers—just installs Node deps.
+
 steps:
-  - name: Setup Node
-    uses: actions/setup-node@v4
-    with:
-      node-version: '20'
-      cache: 'npm'
-
-  - name: Install Dependencies
-    run: npm ci
-
-  - name: Install Playwright Browsers
-    run: npx playwright install --with-deps
-
-  - name: Allowlist GitHub API
-    run: echo "GITHUB_API_ALLOW=1" >> $GITHUB_ENV
+  - run: node -v && npm -v
+  - run: npm ci
+  - run: npm run typecheck || true
+  - run: npm run lint || true
+  # Do not run vite/playwright here in agent sandbox.

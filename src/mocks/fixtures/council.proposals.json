@@ -1,0 +1,11 @@
+{
+  "items": [
+    {
+      "id": "proposal-001",
+      "title": "Adopt Masternode Voting Window",
+      "description": "Set 72h voting window for all proposals.",
+      "createdAt": "2025-10-03T13:00:00Z",
+      "votingEndsAt": "2025-10-06T13:00:00Z"
+    }
+  ]
+}

@@ -113,6 +113,22 @@ code-harmonizer/
 
 ## 🧪 Testing
 
+The project uses a multi-tiered testing approach:
+
+### Unit/Integration Tests (Agent-Safe)
+```bash
+npm run test:ci      # in agent/local fast mode (no network)
+npm run test:unit    # in watch mode for development
+```
+
+### End-to-End Tests
+E2E tests run in CI or locally with browser support:
+```bash
+ALLOW_E2E=1 npm run test:e2e
+```
+
+See [TESTING.md](./TESTING.md) for detailed testing guide.
+
 All features have been tested and verified:
 - ✅ Code input and editing
 - ✅ Intention selection (single and multiple)
