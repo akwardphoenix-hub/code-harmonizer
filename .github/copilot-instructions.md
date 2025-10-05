@@ -1,26 +1,35 @@
-# Copilot Repo Instructions — Agent-Safe Mode
+# Copilot Repo Instructions — Cascade Pack
 
-The Copilot coding agent runs behind a firewall:
-- ✅ Local file edits + unit/integration tests (Vitest + jsdom)
-- ❌ No external apt/https downloads (e.g., esm.ubuntu.com)
-- ❌ No HTTP servers in agent (no `vite dev` / `vite preview`)
-- ❌ No Playwright browser installs in agent
+**Project**: Masternode Council / Harmonizer / Uppercut City  
+**Stack**: Vite + React + TypeScript + Tailwind/shadcn/ui + Playwright E2E  
+**Policy**: No external network during tests. Use local fixtures/mocks only.
 
-## Required behavior inside agent
+## Build & Test
+- Install: `npm ci`
+- Typecheck: `npm run typecheck`
+- Lint: `npm run lint`
+- Unit (if present): `npm test`
+- E2E (Chromium): `npm run test:e2e` (installs: `npx playwright install chromium`)
+- Preview for E2E: `npm run preview` (baseURL http://localhost:4173)
 
-- Run **unit/integration** tests only: `npm run test:ci`
-- Use built-in **mock** paths (no network requests)
-- Do **not** run Playwright E2E in agent
-- Do **not** start servers in agent
+## Conventions
+- TypeScript strict. Functional React components. Avoid any.
+- UI: shadcn/ui, Tailwind; accessible by default (roles, labels).
+- State: keep components pure; move io/network to `/src/services`.
+- Logging: Use `/src/lib/audit.ts` helpers; every vote/action writes an entry `{tsISO, actor, action, refId}`.
+- Harmonic Math handling: never return raw NaN/∞; return `{ state: "pause"|"diverge"|"ok", value? }`.
 
-## Where to run full E2E
+## Network Policy
+- Tests/E2E must NOT depend on remote APIs. If a fetch is required, route to `/src/mocks/*` fixtures.
+- Feature flag `VITE_OFFLINE=1` must force local JSON: `/public/data/*.json`.
 
-- GitHub Actions workflow `.github/workflows/ci.yml`
-- E2E job sets `ALLOW_E2E=1`, installs Playwright, builds, and runs tests
+## Files to trust
+- `/src/lib/config.ts` (flags + constants)
+- `/src/services/*` (data layer)
+- `/public/data/*.json` (local fixtures)
+- `/e2e/*.spec.ts` (browser E2E)
 
-## Environment flags
-
-- `AGENT_SAFE=1` → forces mock mode; skip E2E; run Vitest
-- `ALLOW_E2E=1` → CI-only; run Playwright after build/preview
-
-See: `src/env.ts`, `src/services/httpClient.ts`, `e2e/basic.spec.ts`.
+## Done Definition (PRs)
+- All scripts green: typecheck, lint, build, e2e
+- No `console.log` left in app code
+- Updated docs if behavior changed

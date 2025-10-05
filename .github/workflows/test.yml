@@ -1,48 +1,16 @@
-name: E2E Tests
-
+name: E2E
 on:
+  pull_request:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
 jobs:
-  test:
+  e2e:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install Dependencies
-        run: npm ci --ignore-scripts
-
-      - name: Disable blocked hosts
-        run: |
-          echo "127.0.0.1 esm.ubuntu.com api.github.com" | sudo tee -a /etc/hosts
-
-      - name: Build
-        run: npm run build
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Start Preview Server
-        run: |
-          npm run preview -- --port=4173 &
-          echo $! > .preview-server.pid
-          npx wait-on http://127.0.0.1:4173 --timeout 30000
-
-      - name: Run E2E Tests
-        run: npm run test:e2e
-
-      - name: Stop Preview Server
-        if: always()
-        run: |
-          if [ -f .preview-server.pid ]; then
-            kill $(cat .preview-server.pid) || true
-            rm .preview-server.pid
-          fi
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run test:e2e
