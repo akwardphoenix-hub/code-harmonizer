@@ -1,5 +1,9 @@
 name: CI
 
+# This workflow performs VALIDATION ONLY - it does not modify any repository files.
+# All steps are read-only checks: lint, typecheck, build, and test.
+# The repository must remain clean after this workflow completes.
+
 on:
   push:
     branches: [ main ]
