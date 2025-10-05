@@ -1,6 +1,6 @@
 # ✨ Code Harmonizer - Universal Code Intelligence Platform
 
-[![CI](https://github.com/akwardphoenix-hub/code-harmonizer/actions/workflows/ci.yml/badge.svg)](https://github.com/akwardphoenix-hub/code-harmonizer/actions/workflows/ci.yml)
+[![CI](https://github.com/akwardphoenix-hub/code-harmonizer/actions/workflows/main.yml/badge.svg)](https://github.com/akwardphoenix-hub/code-harmonizer/actions/workflows/main.yml)
 
 A web-based code harmonization platform that transforms code based on developer intentions, going beyond simple formatting to achieve true code harmony through AI-powered analysis and transformation.
 
