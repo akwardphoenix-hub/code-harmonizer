@@ -10,7 +10,8 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'npm run dev',
+    // Serve static build (offline-first) instead of dev server
+    command: 'npm run preview',
     port: 5173,
     reuseExistingServer: !process.env.CI,
   },

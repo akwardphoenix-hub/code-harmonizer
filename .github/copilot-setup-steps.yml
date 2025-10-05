@@ -1,0 +1,31 @@
+name: Copilot Preinstall
+on:
+  workflow_call:
+    inputs: {}
+jobs:
+  preinstall:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Install Playwright (Chromium only)
+        run: npx playwright install chromium --with-deps
+
+      - name: Build app (static)
+        run: npm run build
+
+      - name: Upload build for agent reuse
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-bundle
+          path: dist
