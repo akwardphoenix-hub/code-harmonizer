@@ -1,0 +1,48 @@
+name: Copilot Pre-Setup (Offline-First)
+on:
+  workflow_call:
+    secrets: {}
+  workflow_dispatch: {}
+
+jobs:
+  preinstall:
+    runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ./.playwright-browsers
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install deps (npm ci)
+        run: npm ci
+
+      - name: Install Playwright Chromium (with system deps)
+        run: npx playwright install --with-deps chromium
+
+      - name: Build static app
+        run: npm run build
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-dist
+          path: dist
+
+      - name: Upload Playwright browsers
+        uses: actions/upload-artifact@v4
+        with:
+          name: pw-browsers
+          path: .playwright-browsers
+
+      - name: Upload node_modules cache (optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-modules
+          path: |
+            node_modules
+          if-no-files-found: ignore
