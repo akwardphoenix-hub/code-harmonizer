@@ -1,9 +1,0 @@
-# Runs BEFORE the agent firewall in its ephemeral environment.
-# Keep minimal—no external apt, no servers.
-
-steps:
-  - run: node -v && npm -v
-  - run: npm ci
-  - run: npm run typecheck || true
-  - run: npm run lint || true
-  # Do not run vite/playwright in the agent sandbox.
