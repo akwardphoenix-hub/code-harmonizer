@@ -1,21 +1,25 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const PORT = 4173;
+const HOST = '127.0.0.1';
+const BASE = `http://${HOST}:${PORT}`;
+
 export default defineConfig({
   testDir: './e2e',
-  retries: 1,
-  reporter: [['list'], ['html', { outputFolder: 'playwright-report' }]],
+  timeout: 30_000,
   use: {
-    baseURL: 'http://127.0.0.1:5173',
-    headless: true,
+    baseURL: BASE,
     trace: 'on-first-retry',
+    browserName: 'chromium',
   },
   webServer: {
-    // Serve static build (offline-first) instead of dev server
-    command: 'npm run preview',
-    port: 5173,
+    command: 'node scripts/serve-dist.mjs',
+    url: BASE,
     reuseExistingServer: !process.env.CI,
+    timeout: 15_000,
+    stderr: 'pipe',
   },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-  ],
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } }
+  ]
 });

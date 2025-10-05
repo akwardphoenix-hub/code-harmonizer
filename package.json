@@ -6,11 +6,13 @@
     "scripts": {
         "dev": "vite",
         "kill": "fuser -k 5000/tcp",
-        "build": "tsc -b --noCheck && vite build",
+        "build": "vite build",
         "lint": "eslint .",
         "optimize": "vite optimize",
-        "preview": "vite preview",
-        "test:e2e": "playwright test"
+        "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
+        "test:e2e": "playwright test --reporter=line",
+        "test:e2e:ui": "playwright test --ui",
+        "prepublish:check": "scripts/pre-publish-check.sh"
     },
     "dependencies": {
         "@github/spark": "^0.39.0",
@@ -87,6 +89,7 @@
         "eslint-plugin-react-hooks": "^5.2.0",
         "eslint-plugin-react-refresh": "^0.4.19",
         "globals": "^16.0.0",
+        "serve-handler": "^6.1.6",
         "tailwindcss": "^4.1.11",
         "typescript": "~5.7.2",
         "typescript-eslint": "^8.38.0",
