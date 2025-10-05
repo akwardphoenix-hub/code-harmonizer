@@ -1,25 +1,20 @@
-# Testing Guide
+# Testing
 
-## Goals
-- Agent-safe unit/integration (Vitest/jsdom + msw)
-- Full E2E (Playwright) **only** in GitHub Actions (or locally if you allow it)
+## Quick Start
 
-## Local Unit/Integration
-```bash
-npm ci
-npm run test:ci      # uses AGENT_SAFE=1, no network
-```
+- Agent-safe unit/integration: `npm run test:ci`
+- Agent-safe unit (watch): `npm run test:unit`
+- Agent-safe CI run: `npm run test:ci`
+- Full E2E locally: `npx playwright install && npm run build && npm run preview & ALLOW_E2E=1 npm run test:e2e`
 
-## Local E2E (optional)
+## How it works
 
-Requires a local browser install; not for Copilot agent.
-
-```bash
-npm run build
-ALLOW_E2E=1 npm run test:e2e
-```
+- `AGENT_SAFE=1` → `src/services/httpClient.ts` uses fixtures instead of fetch
+- `ALLOW_E2E=1` → `playwright.config.ts` launches `npm run preview` and runs E2E
 
 ## CI
 
-- `unit` job runs vitest (fast & agent-safe)
-- `e2e` job installs Playwright browsers, builds, runs E2E
+- `unit` job → typecheck, lint, `test:ci`
+- `e2e` job → install browsers, build, Playwright tests
+
+No external network needed for unit/integration. E2E runs where browsers & server are allowed.

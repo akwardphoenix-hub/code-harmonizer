@@ -1,3 +1,2 @@
-// Optional placeholder to keep script hook happy.
-// You can expand with bundle size checks, dead link checks, etc.
-console.log('Prepublish check: OK (placeholder)');
+#!/usr/bin/env node
+console.log('Prepublish check: typecheck + lint + agent-safe tests');

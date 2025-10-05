@@ -1,11 +1,16 @@
-{
-  "items": [
-    {
-      "id": "proposal-001",
-      "title": "Adopt Masternode Voting Window",
-      "description": "Set 72h voting window for all proposals.",
-      "createdAt": "2025-10-03T13:00:00Z",
-      "votingEndsAt": "2025-10-06T13:00:00Z"
-    }
-  ]
-}
+[
+  {
+    "id": "proposal-001",
+    "title": "Adopt Harmonic Kernel for Math Ops",
+    "description": "Replace fragile zero/negatives with ⊘↺∥ states",
+    "createdAt": "2025-10-03T13:00:00Z",
+    "votingEndsAt": "2025-10-10T23:59:59Z"
+  },
+  {
+    "id": "proposal-002",
+    "title": "Add E2E Agent-Safe Pipeline",
+    "description": "Split unit (Vitest) and E2E (Playwright in Actions)",
+    "createdAt": "2025-10-04T09:40:00Z",
+    "votingEndsAt": "2025-10-11T23:59:59Z"
+  }
+]

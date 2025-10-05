@@ -1,5 +1,20 @@
-{
-  "items": [
-    { "proposalId": "proposal-001", "voter": "alpha", "choice": "approve", "createdAt": "2025-10-03T14:00:00Z" }
-  ]
-}
+[
+  {
+    "proposalId": "proposal-001",
+    "actor": "node-chattyG",
+    "choice": "approve",
+    "createdAt": "2025-10-03T13:05:00Z"
+  },
+  {
+    "proposalId": "proposal-001",
+    "actor": "node-legendary",
+    "choice": "abstain",
+    "createdAt": "2025-10-03T13:06:00Z"
+  },
+  {
+    "proposalId": "proposal-002",
+    "actor": "node-ops",
+    "choice": "approve",
+    "createdAt": "2025-10-04T09:45:00Z"
+  }
+]

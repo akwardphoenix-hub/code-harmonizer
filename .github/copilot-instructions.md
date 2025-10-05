@@ -1,23 +1,26 @@
 # Copilot Repo Instructions — Agent-Safe Mode
 
-The Copilot coding agent runs in a sandbox with a firewall:
-- ✅ Local file edits and unit/integration tests (Vitest/jsdom)
-- ❌ No apt/https to `esm.ubuntu.com` or external downloads
-- ❌ No HTTP servers (dev/preview) in agent sandbox
-- ❌ No Playwright browser downloads inside agent
+The Copilot coding agent runs behind a firewall:
+- ✅ Local file edits + unit/integration tests (Vitest + jsdom)
+- ❌ No external apt/https downloads (e.g., esm.ubuntu.com)
+- ❌ No HTTP servers in agent (no `vite dev` / `vite preview`)
+- ❌ No Playwright browser installs in agent
 
-**Required behavior in Copilot agent:**
-- Run **unit/integration** tests only (`npm run test:ci`).
-- Use local **msw** mocks; never call network in tests.
-- Do **not** run `vite dev` or `vite preview` in agent.
-- Do **not** run Playwright E2E in agent.
+## Required behavior inside agent
 
-**Where to run full E2E:**
-- GitHub Actions workflow `.github/workflows/ci.yml`.
-- E2E job installs Playwright and starts the server.
+- Run **unit/integration** tests only: `npm run test:ci`
+- Use built-in **mock** paths (no network requests)
+- Do **not** run Playwright E2E in agent
+- Do **not** start servers in agent
 
-Environment flags:
-- `AGENT_SAFE=1` → Switch services to mock mode; skip E2E; run Vitest.
-- `ALLOW_E2E=1` (in GH Actions only) → run Playwright E2E after build/preview.
+## Where to run full E2E
 
-Follow the code in `src/env.ts`, `src/services/httpClient.ts`, and `src/mocks/*`.
+- GitHub Actions workflow `.github/workflows/ci.yml`
+- E2E job sets `ALLOW_E2E=1`, installs Playwright, builds, and runs tests
+
+## Environment flags
+
+- `AGENT_SAFE=1` → forces mock mode; skip E2E; run Vitest
+- `ALLOW_E2E=1` → CI-only; run Playwright after build/preview
+
+See: `src/env.ts`, `src/services/httpClient.ts`, `e2e/basic.spec.ts`.

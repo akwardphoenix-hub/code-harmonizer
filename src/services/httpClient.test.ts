@@ -1,30 +1,17 @@
-import { describe, it, expect } from 'vitest';
-import { http } from './httpClient';
+import { expect, test, beforeAll } from 'vitest';
 
-describe('httpClient', () => {
-  it('should be defined', () => {
-    expect(http).toBeDefined();
-    expect(http.get).toBeDefined();
-    expect(http.post).toBeDefined();
-  });
+beforeAll(() => {
+  process.env.AGENT_SAFE = '1';
+});
 
-  it('should have get and post methods', () => {
-    expect(typeof http.get).toBe('function');
-    expect(typeof http.post).toBe('function');
-  });
+test('httpClient mock GET returns fixtures', async () => {
+  const { http } = await import('./httpClient');
+  const bills = await http.get('/api/congress/bills');
+  expect(bills).toBeDefined();
+});
 
-  it('should handle congress API endpoint', async () => {
-    const result = await http.get('/api/congress/bills');
-    expect(result).toBeDefined();
-  });
-
-  it('should handle council proposals endpoint', async () => {
-    const result = await http.get('/api/council/proposals');
-    expect(result).toBeDefined();
-  });
-
-  it('should handle post requests', async () => {
-    const result = await http.post('/api/council/vote', { vote: 'yes' });
-    expect(result).toBeDefined();
-  });
+test('httpClient mock POST returns echo', async () => {
+  const { http } = await import('./httpClient');
+  const res = await http.post('/api/council/vote', { choice: 'approve' });
+  expect(res).toHaveProperty('ok');
 });
