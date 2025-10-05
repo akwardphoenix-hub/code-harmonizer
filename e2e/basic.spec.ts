@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import './support/network';
 
 test.describe('Code Harmonizer E2E', () => {
   test('should load the application', async ({ page }) => {

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import './support/network';
 
 test('app loads and shows Code Harmonizer', async ({ page }) => {
   await page.goto('/');
