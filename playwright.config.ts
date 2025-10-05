@@ -1,8 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const PORT = 4173;
-const HOST = '127.0.0.1';
-const BASE = `http://${HOST}:${PORT}`;
+// For baseURL, always use localhost since that's where the browser connects
+// The server (serve-dist.mjs) will bind to 0.0.0.0 in CI, 127.0.0.1 locally
+const BASE = `http://localhost:${PORT}`;
 const allowE2E = process.env.ALLOW_E2E === '1';
 
 export default defineConfig({
