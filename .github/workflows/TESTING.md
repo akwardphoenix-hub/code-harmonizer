@@ -2,7 +2,7 @@ Testing Guide
 
 ## Running Locally
 ```bash
-npm install
-npx playwright install chromium
-npm run dev
+npm ci
+npx playwright install chromium --with-deps
+npm run build
 npm run test:e2e
