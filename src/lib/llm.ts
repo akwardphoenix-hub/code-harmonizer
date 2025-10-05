@@ -1,14 +1,7 @@
 /**
  * LLM helper that provides a fallback when Spark LLM is not available
+ * Note: Window.spark type is defined by @github/spark package
  */
-
-declare global {
-  interface Window {
-    spark?: {
-      llm: (prompt: string) => Promise<string>
-    }
-  }
-}
 
 /**
  * Call the LLM with a fallback for development/testing

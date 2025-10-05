@@ -1,5 +1,7 @@
 # ✨ Code Harmonizer - Universal Code Intelligence Platform
 
+[![CI](https://github.com/akwardphoenix-hub/code-harmonizer/actions/workflows/ci.yml/badge.svg)](https://github.com/akwardphoenix-hub/code-harmonizer/actions/workflows/ci.yml)
+
 A web-based code harmonization platform that transforms code based on developer intentions, going beyond simple formatting to achieve true code harmony through AI-powered analysis and transformation.
 
 ![Code Harmonizer](https://github.com/user-attachments/assets/de82f096-4bfe-414f-b41a-ea8ea5bda79b)
@@ -112,6 +114,42 @@ code-harmonizer/
 ```
 
 ## 🧪 Testing
+
+The project uses a multi-tiered testing approach:
+
+### Unit/Integration Tests (Agent-Safe)
+```bash
+npm run test:ci      # in agent/local fast mode (no network)
+npm run test:unit    # in watch mode for development
+```
+
+### End-to-End Tests
+E2E tests run in CI or locally with browser support:
+```bash
+ALLOW_E2E=1 npm run test:e2e
+```
+
+### Agent Mode (Copilot Sandbox)
+
+Copilot's sandbox environment blocks HTTP and apt. Use Agent Mode for firewall-proof testing:
+
+**What it does:**
+- Uses deterministic KV/LLM fallbacks (no network)
+- Builds once, opens via `file://` in Playwright
+- Runs smoke test only (`00-agent-smoke.spec.ts`)
+
+**Commands:**
+```bash
+npm run build
+npm run test:e2e:agent
+```
+
+Or combined:
+```bash
+npm run prepublish:agent
+```
+
+See [TESTING.md](./TESTING.md) for detailed testing guide.
 
 All features have been tested and verified:
 - ✅ Code input and editing

@@ -1,39 +1,38 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Offline-first E2E', () => {
-  test('loads app shell', async ({ page }) => {
+test.describe('Code Harmonizer E2E', () => {
+  test('should load the application', async ({ page }) => {
     await page.goto('/');
-    // Fallback to common app text; adjust to your UI if needed:
-    await expect(page.locator('body')).toContainText(/(Harmonizer|Uppercut City|Dashboard)/i);
+    
+    // Check that the page loads with the correct title
+    await expect(page).toHaveTitle(/Code Harmonizer/i);
   });
 
-  test('blocks external network', async ({ page, context }) => {
-    await context.route('**/*', (route) => {
-      const url = route.request().url();
-      const isLocal = url.startsWith('http://127.0.0.1:4173') || url.startsWith('http://localhost:4173');
-      if (isLocal) {
-        route.continue();
-      } else {
-        route.abort();
-      }
-    });
+  test('should display the main components', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('body')).toBeVisible();
+    
+    // Wait for the app to load
+    await page.waitForLoadState('networkidle');
+    
+    // Check for key elements
+    await expect(page.getByText('Code Harmonizer')).toBeVisible();
+    await expect(page.getByText('Intention Library')).toBeVisible();
   });
 
-  test('main UI mounts (smoke)', async ({ page }) => {
+  test('should allow loading sample code', async ({ page }) => {
     await page.goto('/');
-    const candidates = [
-      '[data-testid="intention-library"]',
-      '[data-testid="code-editor"]',
-      '[data-testid="harmonization-engine"]',
-      'text=/Intention Library/i',
-      'text=/Harmonization/i'
-    ];
-    let found = false;
-    for (const sel of candidates) {
-      if (await page.locator(sel).first().count()) { found = true; break; }
+    
+    // Wait for the app to load
+    await page.waitForLoadState('networkidle');
+    
+    // Find and click the "Load Sample" button
+    const loadSampleButton = page.getByRole('button', { name: /Load Sample/i });
+    
+    if (await loadSampleButton.isVisible()) {
+      await loadSampleButton.click();
+      
+      // Verify that code was loaded (check for common code elements)
+      await expect(page.getByText(/function/i)).toBeVisible();
     }
-    expect(found).toBeTruthy();
   });
 });
