@@ -27,7 +27,7 @@ async function mockGet<T>(path: string): Promise<T> {
   // Route known endpoints to fixtures
   if (path.startsWith('/api/congress/')) {
     const data = await import('../mocks/fixtures/congress.sample.json');
-    // @ts-expect-error dynamic import default compat
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (data.default ?? data) as T;
   }
   if (path.startsWith('/api/council/proposals')) {
