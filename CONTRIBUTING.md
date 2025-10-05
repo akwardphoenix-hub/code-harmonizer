@@ -55,6 +55,24 @@ ALLOW_E2E=1 npm run test:e2e
 - HTTP server operations
 - Network requests
 
+### Agent Mode E2E (Copilot Sandbox)
+
+For testing in the Copilot agent sandbox where HTTP and apt are blocked:
+
+```bash
+# Run agent-safe E2E smoke test (no HTTP server, uses file://)
+npm run test:e2e:agent
+
+# Or build + test in one command
+npm run prepublish:agent
+```
+
+Agent Mode:
+- Opens built app via `file://` protocol (no HTTP server)
+- Uses local fallbacks for KV/LLM (no network calls)
+- Runs smoke test only (`00-agent-smoke.spec.ts`)
+- Automatically builds before testing
+
 ### Other Commands
 
 ```bash

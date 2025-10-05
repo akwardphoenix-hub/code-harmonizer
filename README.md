@@ -129,6 +129,26 @@ E2E tests run in CI or locally with browser support:
 ALLOW_E2E=1 npm run test:e2e
 ```
 
+### Agent Mode (Copilot Sandbox)
+
+Copilot's sandbox environment blocks HTTP and apt. Use Agent Mode for firewall-proof testing:
+
+**What it does:**
+- Uses deterministic KV/LLM fallbacks (no network)
+- Builds once, opens via `file://` in Playwright
+- Runs smoke test only (`00-agent-smoke.spec.ts`)
+
+**Commands:**
+```bash
+npm run build
+npm run test:e2e:agent
+```
+
+Or combined:
+```bash
+npm run prepublish:agent
+```
+
 See [TESTING.md](./TESTING.md) for detailed testing guide.
 
 All features have been tested and verified:

@@ -15,8 +15,10 @@
         "test:unit": "vitest --watch=false",
         "test:e2e": "playwright test",
         "test:e2e:ui": "playwright test --ui",
+        "test:e2e:agent": "cross-env AGENT_MODE=1 playwright test -c e2e/agent.playwright.config.ts",
         "test:report": "playwright show-report",
-        "prepublish:check": "node ./scripts/prepublish-check.js || echo 'Optional check not found'"
+        "prepublish:check": "node ./scripts/prepublish-check.js || echo 'Optional check not found'",
+        "prepublish:agent": "cross-env AGENT_MODE=1 npm run build && npm run test:e2e:agent"
     },
     "dependencies": {
         "@github/spark": "^0.39.0",
@@ -89,6 +91,7 @@
         "@types/react-dom": "^19.0.4",
         "@vitejs/plugin-react": "^4.3.4",
         "@vitejs/plugin-react-swc": "^3.10.1",
+        "cross-env": "^7.0.3",
         "eslint": "^9.28.0",
         "eslint-plugin-react-hooks": "^5.2.0",
         "eslint-plugin-react-refresh": "^0.4.19",
