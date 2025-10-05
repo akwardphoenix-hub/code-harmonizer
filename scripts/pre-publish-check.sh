@@ -38,18 +38,23 @@ else
 fi
 
 # --- Step 6: Test suite ---
-echo "--- Running tests ---"
-npm test || { echo "❌ Tests failed"; exit 1; }
+if npm run | grep -q "^  test$"; then
+  echo "--- Running tests ---"
+  npm test || { echo "❌ Tests failed"; exit 1; }
+else
+  echo "ℹ️  No unit test script found, skipping"
+fi
 
 # --- Step 7: End-to-end tests ---
 if [ -d "e2e" ]; then
   echo "--- Running Playwright E2E tests ---"
   if [ "$SKIP_NET" -eq 0 ]; then
-    npx playwright install --with-deps
+    npx playwright install chromium --with-deps
+    npm run test:e2e || { echo "❌ E2E tests failed"; exit 1; }
   else
-    echo "⏭️  Skipping browser download (no network)"
+    echo "⏭️  Skipping E2E tests (requires pre-installed browsers)"
+    echo "ℹ️  In CI, browsers should be installed via .github/copilot-setup-steps.yml"
   fi
-  npm run test:e2e || { echo "❌ E2E tests failed"; exit 1; }
 else
   echo "ℹ️  No e2e/ directory found, skipping"
 fi
