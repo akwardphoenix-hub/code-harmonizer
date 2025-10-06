@@ -10,23 +10,19 @@ setup:
         node-version: '20'
         cache: 'npm'
 
-    # 2. Install pnpm (faster + more deterministic)
-    - name: Install pnpm
-      run: npm install -g pnpm
-
-    # 3. Install all dependencies with lockfile
+    # 2. Install all dependencies with lockfile
     - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      run: npm ci
 
-    # 4. Build before tests (avoids vite runtime calls under firewall)
+    # 3. Build before tests (avoids vite runtime calls under firewall)
     - name: Build app
-      run: pnpm run build
+      run: npm run build
 
-    # 5. Run lint & type check (gives Copilot a clean slate)
+    # 4. Run lint & type check (gives Copilot a clean slate)
     - name: Validate project
       run: |
-        pnpm run lint || echo "Lint errors (non-blocking)"
-        pnpm run typecheck || echo "Type errors (non-blocking)"
+        npm run lint || echo "Lint errors (non-blocking)"
+        npm run typecheck || echo "Type errors (non-blocking)"
 
     # 6. Install Playwright deps if E2E is present
     - name: Install Playwright browsers
