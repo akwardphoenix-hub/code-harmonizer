@@ -1,0 +1,17 @@
+[
+  {
+    "id": "evt-1",
+    "type": "proposal.created",
+    "ref": "proposal-001",
+    "actor": "node-ops",
+    "createdAt": "2025-10-03T13:00:10Z"
+  },
+  {
+    "id": "evt-2",
+    "type": "vote.cast",
+    "ref": "proposal-001",
+    "actor": "node-chattyG",
+    "choice": "approve",
+    "createdAt": "2025-10-03T13:05:00Z"
+  }
+]
