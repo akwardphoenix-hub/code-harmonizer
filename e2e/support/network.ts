@@ -30,7 +30,6 @@ export async function blockNonLocal(page: Page) {
     }
     
     // Default: block with informative message
-    console.warn(`[E2E] Blocked external request: ${url}`);
     return route.fulfill({
       status: 200,
       contentType: 'application/json',
