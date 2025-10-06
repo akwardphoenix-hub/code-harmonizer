@@ -1,0 +1,7 @@
+{
+  "message": "Sample fixture data for offline testing",
+  "timestamp": "2025-01-01T00:00:00Z",
+  "data": {
+    "items": []
+  }
+}

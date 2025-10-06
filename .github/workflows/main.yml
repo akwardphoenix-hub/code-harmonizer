@@ -91,6 +91,7 @@ jobs:
       - name: Run E2E tests
         env:
           ALLOW_E2E: '1'
+          VITE_OFFLINE: 'true'
         run: npm run test:e2e
 
       - name: Upload test results
