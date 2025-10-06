@@ -38,6 +38,8 @@ jobs:
       PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.playwright-browsers
       PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS: '1'
       CI: 'true'
+      NODE_ENV: 'test'
+      ALLOW_E2E: '1'
     steps:
       - uses: actions/checkout@v4
 

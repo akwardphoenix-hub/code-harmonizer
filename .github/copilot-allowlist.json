@@ -1,0 +1,6 @@
+{
+  "allowedDomains": [
+    "runtime.github.com",
+    "models.github.ai"
+  ]
+}

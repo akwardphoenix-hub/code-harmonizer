@@ -1,0 +1,12 @@
+{
+  "model": "gpt-4",
+  "response": "Mock LLM response for testing",
+  "mock": true,
+  "choices": [
+    {
+      "text": "This is a mock response from the GitHub Models API",
+      "index": 0,
+      "finish_reason": "stop"
+    }
+  ]
+}
