@@ -29,7 +29,27 @@ export async function getProposals(): Promise<Proposal[]> {
 
 export async function saveVoteLocally(entry: { proposalId: string; vote: string; actor: string }) {
   const key = 'council-votes';
-  const cur = JSON.parse(localStorage.getItem(key) || '[]') as typeof entry[];
+  let cur: typeof entry[] = [];
+  try {
+    const raw = localStorage.getItem(key);
+    const parsed = JSON.parse(raw || '[]');
+    if (
+      Array.isArray(parsed) &&
+      parsed.every(
+        (e) =>
+          typeof e === 'object' &&
+          e !== null &&
+          typeof e.proposalId === 'string' &&
+          typeof e.vote === 'string' &&
+          typeof e.actor === 'string'
+      )
+    ) {
+      cur = parsed;
+    }
+  } catch {
+    // If parsing fails, fall back to empty array
+    cur = [];
+  }
   cur.push(entry);
   localStorage.setItem(key, JSON.stringify(cur));
 }
