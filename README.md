@@ -129,12 +129,25 @@ E2E tests run in CI or locally with browser support:
 ALLOW_E2E=1 npm run test:e2e
 ```
 
+### Network Mocking Verification
+To verify that network mocking is properly configured:
+```bash
+npm run verify:network  # check all mocking configurations
+```
+
+This verifies that:
+- Copilot allowlist is configured for GitHub domains
+- Mock fixtures exist for `runtime.github.com` and `models.github.ai`
+- Test files are present and up-to-date
+- Build artifacts are ready for E2E testing
+
 ### Agent Mode (Copilot Sandbox)
 
 Copilot's sandbox environment blocks HTTP and apt. Use Agent Mode for firewall-proof testing:
 
 **What it does:**
 - Uses deterministic KV/LLM fallbacks (no network)
+- Mocks all GitHub API calls (`runtime.github.com`, `models.github.ai`)
 - Builds once, opens via `file://` in Playwright
 - Runs smoke test only (`00-agent-smoke.spec.ts`)
 
@@ -149,7 +162,7 @@ Or combined:
 npm run prepublish:agent
 ```
 
-See [TESTING.md](./TESTING.md) for detailed testing guide.
+See [TESTING.md](./TESTING.md) and [NETWORK_MOCKING.md](./NETWORK_MOCKING.md) for detailed guides.
 
 All features have been tested and verified:
 - ✅ Code input and editing

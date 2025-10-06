@@ -8,12 +8,20 @@ export interface HttpClient {
 }
 
 async function realGet<T>(path: string): Promise<T> {
+  // Mock GitHub domains in test mode to avoid firewall blocks
+  if (ENV.IS_TEST && (path.includes('runtime.github.com') || path.includes('models.github.ai'))) {
+    return mockGet<T>(path);
+  }
   const res = await fetch(path, { headers: { 'Accept': 'application/json' } });
   if (!res.ok) throw new Error(`HTTP ${res.status} for ${path}`);
   return res.json() as Promise<T>;
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function realPost<T>(path: string, body: any): Promise<T> {
+  // Mock GitHub domains in test mode to avoid firewall blocks
+  if (ENV.IS_TEST && (path.includes('runtime.github.com') || path.includes('models.github.ai'))) {
+    return mockPost<T>(path, body);
+  }
   const res = await fetch(path, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -24,6 +32,17 @@ async function realPost<T>(path: string, body: any): Promise<T> {
 }
 
 async function mockGet<T>(path: string): Promise<T> {
+  // Route GitHub API endpoints to fixtures
+  if (path.includes('runtime.github.com')) {
+    const data = await import('../mocks/fixtures/github-runtime.json');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (data as any).default ?? data as T;
+  }
+  if (path.includes('models.github.ai')) {
+    const data = await import('../mocks/fixtures/github-models.json');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (data as any).default ?? data as T;
+  }
   // Route known endpoints to fixtures
   if (path.startsWith('/api/congress/')) {
     const data = await import('../mocks/fixtures/congress.sample.json');

@@ -17,6 +17,7 @@
         "test:e2e:ui": "playwright test --ui",
         "test:e2e:agent": "cross-env AGENT_MODE=1 playwright test -c e2e/agent.playwright.config.ts",
         "test:report": "playwright show-report",
+        "verify:network": "node scripts/verify-network-mocking.mjs",
         "prepublish:check": "scripts/pre-publish-check.sh",
         "prepublish:agent": "cross-env AGENT_MODE=1 npm run build && npm run test:e2e:agent",
         "regen-docs": "bash scripts/regen-docs.sh"
