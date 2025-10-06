@@ -1,25 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "== Pre-publish check (offline-first) =="
+echo "🔎 Node/npm:"
+node -v || true
+npm -v || true
 
-echo "Node: $(node -v)"
-echo "NPM : $(npm -v)"
+echo "📦 Install deps"
+npm ci
 
-echo "Lint (if configured)..."
-npm run lint || echo "No lint script; continuing."
+echo "🔤 Typecheck"
+npm run typecheck || true
 
-echo "Build..."
+echo "🧹 Lint"
+npm run lint || true
+
+echo "🏗️ Build"
 npm run build
 
-echo "Playwright sanity (no downloads here)..."
-if [ -d ".playwright-browsers" ] || [ -d "$HOME/.cache/ms-playwright" ]; then
-  echo "Playwright browsers present."
-else
-  echo "WARNING: Browsers not preinstalled; E2E may be skipped in sandbox."
-fi
+echo "🧪 Install Playwright browsers"
+npx playwright install chromium
 
-echo "Run E2E..."
-npx playwright test || echo "E2E failed in sandbox; ensure preinstall workflow ran."
+echo "🧭 E2E"
+npm run test:e2e
 
-echo "OK"
+echo "✅ All checks attempted. Review failures above (if any)."

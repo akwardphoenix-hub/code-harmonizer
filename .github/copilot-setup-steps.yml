@@ -1,39 +1,37 @@
 # Pre-install steps for Copilot agent before firewall comes up
-# Works across all Spark repos (council, chess, rap game)
+# Combines offline-first requirements with comprehensive setup
 
-setup:
-  steps:
-    # 1. Ensure correct Node version
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
+name: Copilot Setup (Pre-Firewall)
+steps:
+  # 1. Setup Node.js with caching
+  - name: Setup Node
+    uses: actions/setup-node@v4
+    with:
+      node-version: 20
+      cache: npm
 
-    # 2. Install pnpm (faster + more deterministic)
-    - name: Install pnpm
-      run: npm install -g pnpm
+  # 2. Install dependencies
+  - name: Install deps
+    run: npm ci
 
-    # 3. Install all dependencies with lockfile
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+  # 3. Build app (avoids vite runtime calls under firewall)
+  - name: Build app
+    run: npm run build
 
-    # 4. Build before tests (avoids vite runtime calls under firewall)
-    - name: Build app
-      run: pnpm run build
+  # 4. Run lint & type check (gives Copilot a clean slate)
+  - name: Validate project
+    run: |
+      npm run lint || echo "Lint errors (non-blocking)"
+      npm run typecheck || echo "Type errors (non-blocking)"
 
-    # 5. Run lint & type check (gives Copilot a clean slate)
-    - name: Validate project
-      run: |
-        pnpm run lint || echo "Lint errors (non-blocking)"
-        pnpm run typecheck || echo "Type errors (non-blocking)"
+  # 5. Install Playwright browsers (Chromium only for speed, no --with-deps to avoid apt)
+  - name: Install Playwright (Chromium only)
+    run: npx playwright install chromium
 
-    # 6. Install Playwright deps if E2E is present
-    - name: Install Playwright browsers
-      run: npx playwright install --with-deps
-
-    # 7. Confirm all scripts are available
-    - name: List available scripts
-      run: |
-        echo "=== Available Scripts ==="
-        jq '.scripts' package.json
+  # 6. Confirm all scripts are available
+  - name: List available scripts
+    run: |
+      echo "=== Available Scripts ==="
+      npm run --silent 2>/dev/null || true
+      node -v
+      npm -v

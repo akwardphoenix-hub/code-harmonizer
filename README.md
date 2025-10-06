@@ -45,6 +45,16 @@ npm run lint
 
 The application will be available at `http://localhost:5000`
 
+## Offline Dev / Tests
+- This repo is configured for **offline-first** development.
+- All data loads from `/public/data/*.json`.
+- To run:
+  - `npm ci`
+  - `npx playwright install chromium`
+  - `npm run build && npm run test:e2e`
+
+If you see firewall blocks (esm.ubuntu.com, api.github.com), that's expected in the agent sandbox. The **copilot-setup-steps** pre-installs what it needs before firewall rules apply.
+
 ## 💡 How It Works
 
 ### Development Mode
