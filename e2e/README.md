@@ -13,15 +13,16 @@ The Playwright configuration has been updated to:
 - Serve the pre-built `dist/` folder at http://127.0.0.1:5173
 - Run with Chromium only to minimize browser download size
 
-### Pre-Installation Workflow (`.github/copilot-setup-steps.yml`)
+### CI Workflow (`.github/workflows/main.yml`)
 
-This workflow ensures dependencies and browsers are installed before the agent sandbox:
+This workflow handles all CI tasks including build, tests, and E2E tests:
 1. Checks out code
 2. Sets up Node.js 20.x with npm caching
-3. Runs `npm ci` to install dependencies
-4. Installs Playwright Chromium browser with system dependencies
-5. Builds the static app (`npm run build`)
-6. Uploads the `dist` folder as an artifact for agent reuse
+3. Runs linting and type checking
+4. Builds the static app (`npm run build`)
+5. Runs unit tests
+6. Installs Playwright Chromium browser with system dependencies
+7. Runs E2E tests using the build artifacts
 
 ## Running Tests
 

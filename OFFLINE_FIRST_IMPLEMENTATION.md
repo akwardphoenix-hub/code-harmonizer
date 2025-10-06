@@ -6,18 +6,21 @@ This implementation provides an offline-first testing approach for the Code Harm
 
 ## Changes Made
 
-### 1. GitHub Actions Workflow: `.github/copilot-setup-steps.yml`
+### 1. GitHub Actions Workflow: `.github/workflows/main.yml`
 
-**Purpose**: Pre-install dependencies and browsers before entering the agent sandbox.
+**Purpose**: Unified CI workflow for all checks and tests.
 
 **Key Features**:
 - Installs Node.js 20.x with npm caching
+- Runs linting and type checking
 - Runs `npm ci` to install all dependencies
-- Installs Playwright Chromium browser with system dependencies
 - Builds the static app (`npm run build`)
-- Uploads `dist` folder as artifact for agent reuse
+- Runs unit tests independently
+- Installs Playwright Chromium browser with system dependencies
+- Runs E2E tests using build artifacts
+- Uploads test results and reports
 
-**Why**: Avoids firewall blocks to npm registry, playwright CDN, and system package repositories.
+**Why**: Provides a comprehensive CI pipeline that avoids redundant workflows and ensures all checks pass.
 
 ---
 
@@ -123,7 +126,7 @@ if [ "$SKIP_NET" -eq 0 ]; then
   npm run test:e2e || { echo "❌ E2E tests failed"; exit 1; }
 else
   echo "⏭️  Skipping E2E tests (requires pre-installed browsers)"
-  echo "ℹ️  In CI, browsers should be installed via .github/copilot-setup-steps.yml"
+  echo "ℹ️  In CI, browsers should be installed via .github/workflows/main.yml"
 fi
 ```
 
@@ -180,7 +183,7 @@ All steps pass except E2E tests (requires browser installation in proper CI envi
 ## How It Works
 
 ### Pre-Installation Phase (CI/Workflow)
-1. GitHub Actions runs `.github/copilot-setup-steps.yml`
+1. GitHub Actions runs `.github/workflows/main.yml`
 2. Installs all dependencies and browsers
 3. Builds static app
 4. Uploads `dist` artifact
