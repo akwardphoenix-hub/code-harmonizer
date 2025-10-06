@@ -1,5 +1,3 @@
-import { NOW_ISO } from './config';
-
 export type AuditEntry = {
   ts: string;
   actor: string;
@@ -11,7 +9,7 @@ export type AuditEntry = {
 export function writeAuditLocal(entry: Omit<AuditEntry, 'ts'>) {
   const key = 'audit-log';
   const cur = JSON.parse(localStorage.getItem(key) || '[]');
-  cur.push({ ts: NOW_ISO(), ...entry });
+  cur.push({ ts: new Date().toISOString(), ...entry });
   localStorage.setItem(key, JSON.stringify(cur));
 }
 

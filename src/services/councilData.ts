@@ -1,4 +1,19 @@
-import { DATA_BASE } from '../lib/config';
+import { OFFLINE } from '../lib/config';
+
+type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+
+async function fetchJson<T = JsonValue>(path: string): Promise<T> {
+  if (OFFLINE) {
+    // In offline/CI mode, load from /fixtures
+    const res = await fetch(`/fixtures${path}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`Fetch failed: ${path} -> ${res.status}`);
+    return res.json() as Promise<T>;
+  }
+  // In dev with network, call real endpoint
+  const res = await fetch(`/api${path}`);
+  if (!res.ok) throw new Error(`Fetch failed: ${path} -> ${res.status}`);
+  return res.json() as Promise<T>;
+}
 
 export type Proposal = {
   id: string;
@@ -9,17 +24,12 @@ export type Proposal = {
 };
 
 export async function getProposals(): Promise<Proposal[]> {
-  // Always local fixtures to avoid network flake
-  const res = await fetch(`${DATA_BASE}/council-proposals.json`, { cache: 'no-store' });
-  if (!res.ok) throw new Error('Failed to load proposals');
-  return res.json();
+  return fetchJson<Proposal[]>('/council/proposals.json');
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function saveVoteLocally(entry: any) {
-  // In dev: mirror to localStorage to keep tests hermetic
+export async function saveVoteLocally(entry: { proposalId: string; vote: string; actor: string }) {
   const key = 'council-votes';
-  const cur = JSON.parse(localStorage.getItem(key) || '[]');
+  const cur = JSON.parse(localStorage.getItem(key) || '[]') as typeof entry[];
   cur.push(entry);
   localStorage.setItem(key, JSON.stringify(cur));
 }

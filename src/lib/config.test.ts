@@ -1,13 +1,16 @@
 import { expect, test } from 'vitest';
-import { OFFLINE, DATA_BASE, NOW_ISO } from './config';
+import { OFFLINE, BASE_URL } from './config';
 
 test('config exports expected values', () => {
   expect(typeof OFFLINE).toBe('boolean');
-  expect(DATA_BASE).toBe('/data');
-  expect(typeof NOW_ISO).toBe('function');
+  expect(typeof BASE_URL).toBe('string');
 });
 
-test('NOW_ISO returns ISO string', () => {
-  const iso = NOW_ISO();
-  expect(iso).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
+test('OFFLINE is true in test mode', () => {
+  // In vitest, MODE should be 'test'
+  expect(OFFLINE).toBe(true);
+});
+
+test('BASE_URL has expected format', () => {
+  expect(BASE_URL).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/);
 });

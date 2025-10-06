@@ -19,7 +19,9 @@ jobs:
       # Build once (matches what copilot-setup-steps did locally)
       - run: npm run build
       # Run tests against vite preview on dist
-      - run: npx playwright test
+      - run: npm run test:e2e
+        env:
+          VITE_OFFLINE: 'true'
       - name: Upload HTML report
         if: always()
         uses: actions/upload-artifact@v4
