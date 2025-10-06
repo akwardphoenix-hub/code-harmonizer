@@ -1,48 +1,41 @@
-name: E2E Tests
+name: e2e
 
 on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
 
 jobs:
-  test:
+  e2e:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
+          cache: 'npm'
 
-      - name: Install Dependencies
-        run: npm ci --ignore-scripts
+      - name: Install
+        run: npm ci --no-audit --prefer-offline
 
-      - name: Disable blocked hosts
-        run: |
-          echo "127.0.0.1 esm.ubuntu.com api.github.com" | sudo tee -a /etc/hosts
+      - name: Install Playwright
+        run: npx playwright install chromium
 
       - name: Build
+        env:
+          VITE_TELEMETRY_DISABLED: "1"
+          NODE_ENV: "production"
         run: npm run build
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
+      - name: Run E2E
+        env:
+          VITE_OFFLINE_ONLY: "true"
+        run: npm run ci:all
 
-      - name: Start Preview Server
-        run: |
-          npm run preview -- --port=4173 &
-          echo $! > .preview-server.pid
-          npx wait-on http://127.0.0.1:4173 --timeout 30000
-
-      - name: Run E2E Tests
-        run: npm run test:e2e
-
-      - name: Stop Preview Server
+      - name: Upload report (always)
         if: always()
-        run: |
-          if [ -f .preview-server.pid ]; then
-            kill $(cat .preview-server.pid) || true
-            rm .preview-server.pid
-          fi
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
