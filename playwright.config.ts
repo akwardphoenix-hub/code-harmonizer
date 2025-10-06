@@ -9,10 +9,10 @@ export default defineConfig({
     baseURL: 'http://127.0.0.1:4173',
     trace: 'on-first-retry'
   },
-  webServer: {
+  webServer: process.env.CI ? undefined : {
     command: 'npm run preview',
     url: 'http://127.0.0.1:4173',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
     timeout: 60_000
   },
   projects: [
